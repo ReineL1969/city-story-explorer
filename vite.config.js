@@ -11,4 +11,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  base: '/city-story-explorer/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+  }
 })
+
