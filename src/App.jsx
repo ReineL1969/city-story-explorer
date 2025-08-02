@@ -29,7 +29,7 @@ function App() {
   const [isGeneratingStory, setIsGeneratingStory] = useState(false)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
-  const [storyPrompt, setStoryPrompt] = useState('Write a fascinating historical story about the city of {city}. Include interesting facts, notable events, and cultural significance. Keep it engaging and informative, suitable for a 2-3 minute audio narration.')
+  const [storyPrompt, setStoryPrompt] = useState('Write a fascinating historical story in Swedish, about the city of {city}. Include interesting facts, notable events, and cultural significance. Keep it engaging and informative, suitable for a 2-3 minute audio narration.')
   const [error, setError] = useState('')
   const audioRef = useRef(null)
 
