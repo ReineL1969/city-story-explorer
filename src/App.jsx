@@ -49,7 +49,7 @@ function App() {
         {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 60000
+          maximumAge: 0 // Set maximumAge to 0 to force fresh location updates
         }
       )
 
@@ -63,6 +63,7 @@ function App() {
   const detectCity = async (coords) => {
     try {
       const [lat, lon] = coords
+      console.log(`Attempting to detect city for: ${lat}, ${lon}`)
       const request = createNominatimRequest({
         lat,
         lon,
@@ -76,12 +77,18 @@ function App() {
       
       if (data && data.address) {
         const city = data.address.city || data.address.town || data.address.village || data.address.municipality
+        console.log(`Detected city: ${city}, Last detected city: ${lastDetectedCity}`)
         if (city && city !== lastDetectedCity) {
           setCurrentCity(city)
           setLastDetectedCity(city)
           setShowCityButton(true)
           setStory('')
+          console.log(`New city detected: ${city}. Showing button.`)
+        } else if (city && city === lastDetectedCity) {
+          console.log(`Still in ${city}. Button remains hidden.`)
         }
+      } else {
+        console.log('No city found for current coordinates.')
       }
     } catch (err) {
       console.error('Error detecting city:', err)
@@ -330,4 +337,6 @@ function App() {
 }
 
 export default App
+
+
 
