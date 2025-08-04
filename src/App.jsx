@@ -29,7 +29,8 @@ function App() {
   const [isGeneratingStory, setIsGeneratingStory] = useState(false)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
-  const [storyPrompt, setStoryPrompt] = useState('Write a fascinating historical story in Swedish, about the city of {city}. Include interesting facts, notable events, and cultural significance. Keep it engaging and informative, suitable for a 2-3 minute audio narration.')
+  const [showDebug, setShowDebug] = useState(false) // New state for debug UI
+  const [storyPrompt, setStoryPrompt] = useState('Write a fascinating historical story about the city of {city}. Include interesting facts, notable events, and cultural significance. Keep it engaging and informative, suitable for a 2-3 minute audio narration.')
   const [error, setError] = useState('')
   const audioRef = useRef(null)
 
@@ -203,14 +204,24 @@ function App() {
       {/* Header */}
       <div className="bg-primary text-primary-foreground p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">City Story Explorer</h1>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowSettings(!showSettings)}
-          className="text-primary-foreground hover:bg-primary-foreground/20"
-        >
-          <Settings className="w-5 h-5" />
-        </Button>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowDebug(!showDebug)} // Toggle debug UI
+            className="text-primary-foreground hover:bg-primary-foreground/20"
+          >
+            Debug
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowSettings(!showSettings)}
+            className="text-primary-foreground hover:bg-primary-foreground/20"
+          >
+            <Settings className="w-5 h-5" />
+          </Button>
+        </div>
       </div>
 
       {/* Settings Panel */}
@@ -232,6 +243,22 @@ function App() {
             <p className="text-xs text-muted-foreground mt-1">
               Use {'{city}'} as a placeholder for the detected city name.
             </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Debug UI */}
+      {showDebug && (
+        <Card className="m-4">
+          <CardHeader>
+            <CardTitle>Debug Information</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm">
+            <p><strong>Latitude:</strong> {position ? position[0].toFixed(6) : 'N/A'}</p>
+            <p><strong>Longitude:</strong> {position ? position[1].toFixed(6) : 'N/A'}</p>
+            <p><strong>Current City (Nominatim):</strong> {currentCity || 'N/A'}</p>
+            <p><strong>Last Detected City:</strong> {lastDetectedCity || 'N/A'}</p>
+            <p><strong>Show City Button:</strong> {showCityButton ? 'True' : 'False'}</p>
           </CardContent>
         </Card>
       )}
@@ -337,6 +364,5 @@ function App() {
 }
 
 export default App
-
 
 
