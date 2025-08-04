@@ -73,8 +73,10 @@ function App() {
         addressdetails: 1
       })
       
+      console.log(`Nominatim API URL: ${request.url}`)
       const response = await fetch(request.url)
       const data = await response.json()
+      console.log('Nominatim API response:', data)
       
       if (data && data.address) {
         console.log('Nominatim address:', data.address); // Debug output
@@ -264,6 +266,8 @@ function App() {
             <p><strong>Current City (Nominatim):</strong> {currentCity || 'N/A'}</p>
             <p><strong>Last Detected City:</strong> {lastDetectedCity || 'N/A'}</p>
             <p><strong>Show City Button:</strong> {showCityButton ? 'True' : 'False'}</p>
+            <p><strong>Nominatim API URL:</strong> {nominatimApiUrl || 'N/A'}</p>
+            <p><strong>Nominatim API Response:</strong> {nominatimApiResponse || 'N/A'}</p>
           </CardContent>
         </Card>
       )}
