@@ -77,8 +77,13 @@ function App() {
       const data = await response.json()
       
       if (data && data.address) {
-        const city = data.address.city || data.address.town || data.address.village || data.address.municipality
-        console.log(`Detected city: ${city}, Last detected city: ${lastDetectedCity}`)
+        console.log('Nominatim address:', data.address); // Debug output
+        const city = data.address.city ||
+                     data.address.town ||
+                     data.address.village ||
+                     data.address.municipality ||
+                     data.address.county ||
+                     data.address.state
         if (city && city !== lastDetectedCity) {
           setCurrentCity(city)
           setLastDetectedCity(city)
@@ -364,5 +369,3 @@ function App() {
 }
 
 export default App
-
-
