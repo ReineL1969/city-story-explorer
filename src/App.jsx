@@ -64,6 +64,11 @@ function App() {
 
   // Detect city from coordinates
   const detectCity = async (coords) => {
+    console.log('detectCity called with coordinates:', coords); // Added log
+    if (!coords || coords.length !== 2) {
+      console.log('Invalid coordinates provided to detectCity.');
+      return; // Exit if coordinates are invalid
+    }
     try {
       const [lat, lon] = coords
       console.log(`Attempting to detect city for: ${lat}, ${lon}`)
@@ -377,3 +382,5 @@ function App() {
 }
 
 export default App
+
+
