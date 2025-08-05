@@ -41,6 +41,7 @@ function App() {
     if (navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
         (pos) => {
+          console.log('Geolocation position received:', pos); // Added log
           const newPosition = [pos.coords.latitude, pos.coords.longitude]
           setPosition(newPosition)
           detectCity(newPosition)
