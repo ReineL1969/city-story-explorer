@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Settings, MapPin, Volume2, VolumeX } from 'lucide-react'
-import { createNominatimRequest } from 'nominatim-browser'
+import * as NominatimBrowser from 'nominatim-browser'
 import 'leaflet/dist/leaflet.css'
 import './App.css'
 
@@ -75,24 +75,15 @@ function App() {
     try {
       const [lat, lon] = coords
       console.log(`Attempting to detect city for: ${lat}, ${lon}`)
-      const request = createNominatimRequest({
-        lat,
-        lon,
-        format: 'json',
-        zoom: 10,
+      
+      // Use NominatimBrowser.reverseGeocode directly
+      const data = await NominatimBrowser.reverseGeocode({
+        lat: lat.toString(), // NominatimBrowser expects string for lat/lon
+        lon: lon.toString(),
         addressdetails: 1
       })
       
-      setNominatimApiUrl(request.url)
-      console.log(`Nominatim API URL: ${request.url}`)
-      const response = await fetch(request.url)
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Nominatim API request failed: ${response.status} ${response.statusText} - ${errorText}`);
-      }
-
-      const data = await response.json()
+      setNominatimApiUrl(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`)
       setNominatimApiResponse(JSON.stringify(data, null, 2))
       console.log('Nominatim API response:', data)
       
