@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Settings, MapPin, Volume2, VolumeX } from 'lucide-react'
-import { createNominatimRequest } from 'nominatim-browser'
+import * as NominatimBrowser from 'nominatim-browser'
 import 'leaflet/dist/leaflet.css'
 import './App.css'
 
@@ -33,6 +33,8 @@ function App() {
   const [storyPrompt, setStoryPrompt] = useState('Write a fascinating historical story about the city of {city}. Include interesting facts, notable events, and cultural significance. Keep it engaging and informative, suitable for a 2-3 minute audio narration.')
   const [error, setError] = useState('')
   const audioRef = useRef(null)
+  const [nominatimApiUrl, setNominatimApiUrl] = useState('')
+  const [nominatimApiResponse, setNominatimApiResponse] = useState('')
 
   // Get user's current location
   useEffect(() => {
@@ -65,7 +67,7 @@ function App() {
     try {
       const [lat, lon] = coords
       console.log(`Attempting to detect city for: ${lat}, ${lon}`)
-      const request = createNominatimRequest({
+      const request = NominatimBrowser.createNominatimRequest({
         lat,
         lon,
         format: 'json',
@@ -73,9 +75,11 @@ function App() {
         addressdetails: 1
       })
       
+      setNominatimApiUrl(request.url)
       console.log(`Nominatim API URL: ${request.url}`)
       const response = await fetch(request.url)
       const data = await response.json()
+      setNominatimApiResponse(JSON.stringify(data, null, 2))
       console.log('Nominatim API response:', data)
       
       if (data && data.address) {
