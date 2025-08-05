@@ -67,6 +67,8 @@ function App() {
     console.log('detectCity called with coordinates:', coords); // Added log
     if (!coords || coords.length !== 2) {
       console.log('Invalid coordinates provided to detectCity.');
+      setNominatimApiUrl('N/A');
+      setNominatimApiResponse('Invalid coordinates');
       return; // Exit if coordinates are invalid
     }
     try {
@@ -83,6 +85,12 @@ function App() {
       setNominatimApiUrl(request.url)
       console.log(`Nominatim API URL: ${request.url}`)
       const response = await fetch(request.url)
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Nominatim API request failed: ${response.status} ${response.statusText} - ${errorText}`);
+      }
+
       const data = await response.json()
       setNominatimApiResponse(JSON.stringify(data, null, 2))
       console.log('Nominatim API response:', data)
@@ -105,10 +113,13 @@ function App() {
           console.log(`Still in ${city}. Button remains hidden.`)
         }
       } else {
-        console.log('No city found for current coordinates.')
+        console.log('No city found for current coordinates.');
+        setCurrentCity('N/A');
       }
     } catch (err) {
-      console.error('Error detecting city:', err)
+      console.error('Error detecting city:', err);
+      setNominatimApiResponse(`Error: ${err.message}`);
+      setCurrentCity('N/A');
     }
   }
 
