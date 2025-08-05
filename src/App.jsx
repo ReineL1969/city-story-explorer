@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Settings, MapPin, Volume2, VolumeX } from 'lucide-react'
-import * as NominatimBrowser from 'nominatim-browser'
+import { createNominatimRequest } from 'nominatim-browser'
 import 'leaflet/dist/leaflet.css'
 import './App.css'
 
@@ -75,7 +75,7 @@ function App() {
     try {
       const [lat, lon] = coords
       console.log(`Attempting to detect city for: ${lat}, ${lon}`)
-      const request = NominatimBrowser.createNominatimRequest({
+      const request = createNominatimRequest({
         lat,
         lon,
         format: 'json',
